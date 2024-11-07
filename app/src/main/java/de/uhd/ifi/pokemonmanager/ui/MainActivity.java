@@ -1,6 +1,8 @@
 package de.uhd.ifi.pokemonmanager.ui;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         pokemonAdapter = new PokemonAdapter(this, pokemons);
         RecyclerView.LayoutManager manager = RecyclerViewUtil.createLayoutManager(this);
 
+        //pokemonAdapter.setOnItemClick(pokemon -> Toast.makeText( this, pokemon.toString(), Toast.LENGTH_SHORT).show());
         pokemonList.setLayoutManager(manager);
         pokemonList.setAdapter(pokemonAdapter);
     }
@@ -57,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
             //TODO: implement create Pokemon.
             // The pokemon needs to be added to the storage.
             // Don't forget to refresh pokemonAdapter.
+
             //BONUS: if no Trainers are in Storage the App kinda crashes - how do we prevent that
         });
     }
