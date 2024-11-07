@@ -1,0 +1,50 @@
+<resources>
+    <string name="app_name">PokemonManager</string>
+
+    <string name="pokemon_name">Name</string>
+    <string name="pokemon_type">Type</string>
+    <string name="pokemon_id">ID</string>
+    <string name="pokemon_swap_allow">Swap allowed</string>
+    <string name="pokemon_swaps">Swaps</string>
+    <string name="pokemon_competitions">Competitions</string>
+    <string name="pokemon_trainer">Trainer</string>
+
+    <string name="delete_pokemon_button_description">Click to delete the selected pokemon</string>
+    <string name="delete_pokemon_message">Do you really want to delete the selected pokemon?</string>
+    <string name="delete_pokemon_title">Delete Confirmation</string>
+    <string name="delete_confirm">Delete</string>
+    <string name="delete_cancel">Cancel</string>
+
+    <string name="detail_action_swap">Swap with another Pokemon</string>
+    <string name="detail_action_compete">Compete against another Pokemon</string>
+    <string name="detail_action_save">Save changes and return to list</string>
+
+    <string name="save_detail_message">Do you want to save your changes?</string>
+    <string name="save_detail_title">Save changes</string>
+    <string name="save_detail_positive">Yes</string>
+    <string name="save_detail_negative">No</string>
+
+    <string name="date_format">dd.mm.yyyy</string>
+    <string name="swap_source_trainer">From trainer:</string>
+    <string name="swap_target_trainer">To trainer:</string>
+    <string name="swap_other_pokemon">With Pokemon:</string>
+
+    <string name="competition_won">won</string>
+    <string name="competition_lost">lost</string>
+    <string name="competition_draw">draw</string>
+
+    <string name="add_trainer_button_description">Click to add a new trainer</string>
+
+    <string name="dialog_title_swap">Swap Pokemon</string>
+    <string name="dialog_description_swap">Select a Pokemon to swap with</string>
+    <string name="dialog_title_competition">Execute competition</string>
+    <string name="dialog_description_competition">Select a Pokemon to fight with</string>
+    <string name="dialog_swap">swap</string>
+    <string name="dialog_fight">fight</string>
+
+    <string name="dialog_title_add_trainer">Add New Trainer</string>
+    <string name="dialog_create">Create</string>
+    <string name="firstname">First name</string>
+    <string name="lastname">Last name</string>
+    <string name="warning_non_empty_name">first and last name must be non-empty</string>
+</resources>
