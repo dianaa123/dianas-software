@@ -56,12 +56,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void initUI() {
         // OnClickListener through implementation of interface
-        addPokemonButton.setOnClickListener(view -> {
-            //TODO: implement create Pokemon.
+        addPokemonButton.setOnClickListener(view ->
+        {
+            // COMPLETED_TOD0: implement create Pokemon.
             // The pokemon needs to be added to the storage.
             // Don't forget to refresh pokemonAdapter.
+            Pokemon p1 = new Pokemon("MissingNo.", Type.POISON);
+            Trainer t1 = (STORAGE.getAllTrainers().isEmpty()) ? new Trainer("Ash", "Ketchum") : STORAGE.getTrainerById(0);
+            t1.addPokemon(p1);
 
-            //BONUS: if no Trainers are in Storage the App kinda crashes - how do we prevent that
+            STORAGE.save(p1);
+            STORAGE.save(t1);
+            STORAGE.saveAll(this);
+            pokemonAdapter.refresh();
+            // COMPLETED_BONUS: if no Trainers are in Storage the App kinda crashes - how do we prevent that
         });
     }
 

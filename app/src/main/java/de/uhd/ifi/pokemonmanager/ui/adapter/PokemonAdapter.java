@@ -98,7 +98,7 @@ class PokemonHolder extends ViewHolder {
         trainerText = itemView.findViewById(R.id.trainerText);
         pokemonSwaps = itemView.findViewById(R.id.pokemonSwaps);
         pokemonCompetitions = itemView.findViewById(R.id.pokemonCompetitions);
-        // TODO: Add delete button here
+        // COMPLETED_TOD0: Add delete button here
         deletePokemonButton = itemView.findViewById(R.id.deletePokemonButton);
         this.adapter = adapter;
         itemView.setTag(this);
@@ -115,7 +115,7 @@ class PokemonHolder extends ViewHolder {
         this.pokemonSwaps.setText(String.format(Locale.getDefault(), "Swaps: %d", pokemon.getSwaps().size()));
         this.pokemonCompetitions.setText(String.format(Locale.getDefault(), "Competitions: %d", 0));
 
-        // TODO: Add OnClickListener for delete button here. Don't forget to confirm deletion via a dialog.
+        // COMPLETED_TOD0: Add OnClickListener for delete button here. Don't forget to confirm deletion via a dialog.
         this.deletePokemonButton.setOnClickListener(new View.OnClickListener()
             {
                 @Override
