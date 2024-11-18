@@ -1,7 +1,8 @@
 package de.uhd.ifi.pokemonmanager.ui.adapter;
 
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,8 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.util.Consumer;
 import androidx.recyclerview.widget.RecyclerView.Adapter;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 
@@ -20,8 +19,12 @@ import java.util.List;
 import java.util.Locale;
 
 import de.uhd.ifi.pokemonmanager.R;
+import de.uhd.ifi.pokemonmanager.data.Competition;
 import de.uhd.ifi.pokemonmanager.data.Pokemon;
+import de.uhd.ifi.pokemonmanager.data.Swap;
 import de.uhd.ifi.pokemonmanager.storage.SerialStorage;
+import de.uhd.ifi.pokemonmanager.ui.DetailActivity;
+import de.uhd.ifi.pokemonmanager.ui.MainActivity;
 
 /**
  * Enables to show a list of {@link Pokemon}s in the UI in a so called {@link
@@ -31,37 +34,32 @@ public class PokemonAdapter extends Adapter<PokemonHolder> {
 
     private LayoutInflater inflater;
     private List<Pokemon> pokemons;
-    private Consumer<Pokemon> onItemClick;
 
     public PokemonAdapter(Context context, List<Pokemon> pokemons) {
         this.inflater = LayoutInflater.from(context);
         this.pokemons = pokemons;
     }
 
-    public void setOnItemClick(Consumer<Pokemon> onItemClick) {
-        this.onItemClick = onItemClick;
-    }
-
     @NonNull
     @Override
     public PokemonHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = inflater.inflate(R.layout.listitem_pokemon, parent, false);
-        itemView.setOnClickListener(this::onItemClick);
+
+        // OnClickListener through implementation of interface
+        itemView.setOnClickListener(view -> {
+            ViewHolder holder = (ViewHolder) view.getTag();
+            int clickPosition = holder.getAdapterPosition();
+            Pokemon pokemon = pokemons.get(clickPosition);
+            Intent detailIntent = new Intent(view.getContext(), DetailActivity.class);
+            detailIntent.putExtra(MainActivity.DETAIL_POKEMON, (Parcelable) pokemon);
+            view.getContext().startActivity(detailIntent);
+        });
         return new PokemonHolder(itemView, this);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PokemonHolder holder, int position) {
         holder.setPokemon(pokemons.get(position));
-    }
-
-    private void onItemClick(View view) {
-        ViewHolder holder = (ViewHolder) view.getTag();
-        int pos = holder.getBindingAdapterPosition();
-        Pokemon pokemon = pokemons.get(pos);
-        if(onItemClick != null) {
-            onItemClick.accept(pokemon);
-        }
     }
 
     @Override
@@ -98,8 +96,7 @@ class PokemonHolder extends ViewHolder {
         trainerText = itemView.findViewById(R.id.trainerText);
         pokemonSwaps = itemView.findViewById(R.id.pokemonSwaps);
         pokemonCompetitions = itemView.findViewById(R.id.pokemonCompetitions);
-        // COMPLETED_TOD0: Add delete button here
-        deletePokemonButton = itemView.findViewById(R.id.deletePokemonButton);
+        deletePokemonButton = itemView.findViewById(R.id.deleteButton);
         this.adapter = adapter;
         itemView.setTag(this);
     }
@@ -113,35 +110,36 @@ class PokemonHolder extends ViewHolder {
         this.pokemonId.setText(String.format(Locale.getDefault(), "# %d", pokemon.getId()));
         this.trainerText.setText(pokemon.getTrainer().toString());
         this.pokemonSwaps.setText(String.format(Locale.getDefault(), "Swaps: %d", pokemon.getSwaps().size()));
-        this.pokemonCompetitions.setText(String.format(Locale.getDefault(), "Competitions: %d", 0));
+        this.pokemonCompetitions.setText(String.format(Locale.getDefault(), "Competitions: %d", pokemon.getCompetitions().size()));
 
-        // COMPLETED_TOD0: Add OnClickListener for delete button here. Don't forget to confirm deletion via a dialog.
-        this.deletePokemonButton.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View view)
-                {
-                    new AlertDialog.Builder(view.getContext())
-                            .setMessage(R.string.delete_pokemon_message)
-                            .setTitle(R.string.delete_pokemon_title)
-                            .setPositiveButton(R.string.delete_confirm, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int id) {
-                                    SerialStorage.getInstance().remove(pokemon);
-                                    dialog.dismiss();
-                                    adapter.refresh();
+        // OnClickListener through implementation of interface (anonymous class).
+        // This could be shortened using a lambda expression or method reference.
+        this.deletePokemonButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new MaterialAlertDialogBuilder(view.getContext())
+                        .setMessage(R.string.delete_pokemon_message)
+                        .setTitle(R.string.delete_pokemon_title)
+                        .setPositiveButton(R.string.delete_confirm, (dialog, id) -> {
+                            //delete Swaps or Competitions if both participants deleted
+                            for (Swap swap : pokemon.getSwaps()) {
+                                if (swap.getOtherPokemon(pokemon) == null) {
+                                    SerialStorage.getInstance().remove(swap);
                                 }
-                            })
-                            .setNegativeButton(R.string.delete_cancel, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int id) {
-                                    dialog.dismiss();
+                            }
+                            for (Competition competition : pokemon.getCompetitions()) {
+                                if (competition.getOtherPokemon(pokemon) == null) {
+                                    SerialStorage.getInstance().remove(competition);
                                 }
-                            })
-                            .create()
-                            .show();
-                }
+                            }
+                            SerialStorage.getInstance().remove(pokemon);
+                            dialog.dismiss();
+                            adapter.refresh();
+                        })
+                        .setNegativeButton(R.string.delete_cancel, (dialog, id) -> dialog.dismiss())
+                        .create()
+                        .show();
             }
-        );
+        });
     }
 }

@@ -1,8 +1,7 @@
 package de.uhd.ifi.pokemonmanager.ui;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +22,7 @@ import de.uhd.ifi.pokemonmanager.ui.util.RecyclerViewUtil;
  * Main Android activity for this app. Needs to be run to start the app.
  */
 public class MainActivity extends AppCompatActivity {
+    public static final String DETAIL_POKEMON = "detail_pokemon";
     private static final SerialStorage STORAGE = SerialStorage.getInstance();
 
     // UI widget to show a list of pokemons
@@ -49,27 +49,19 @@ public class MainActivity extends AppCompatActivity {
         pokemonAdapter = new PokemonAdapter(this, pokemons);
         RecyclerView.LayoutManager manager = RecyclerViewUtil.createLayoutManager(this);
 
-        //pokemonAdapter.setOnItemClick(pokemon -> Toast.makeText( this, pokemon.toString(), Toast.LENGTH_SHORT).show());
         pokemonList.setLayoutManager(manager);
         pokemonList.setAdapter(pokemonAdapter);
     }
 
     private void initUI() {
         // OnClickListener through implementation of interface
-        addPokemonButton.setOnClickListener(view ->
-        {
-            // COMPLETED_TOD0: implement create Pokemon.
-            // The pokemon needs to be added to the storage.
-            // Don't forget to refresh pokemonAdapter.
-            Pokemon p1 = new Pokemon("MissingNo.", Type.POISON);
-            Trainer t1 = (STORAGE.getAllTrainers().isEmpty()) ? new Trainer("Ash", "Ketchum") : STORAGE.getTrainerById(0);
-            t1.addPokemon(p1);
-
-            STORAGE.save(p1);
-            STORAGE.save(t1);
-            STORAGE.saveAll(this);
+        addPokemonButton.setOnClickListener(view -> {
+            //Create trainer if none is present
+            if (STORAGE.getAllTrainers().isEmpty()) {
+                STORAGE.save(new Trainer("Ash", "Ketchum"));
+            }
+            STORAGE.save(new Pokemon("New pokemon", Type.FIRE));
             pokemonAdapter.refresh();
-            // COMPLETED_BONUS: if no Trainers are in Storage the App kinda crashes - how do we prevent that
         });
     }
 

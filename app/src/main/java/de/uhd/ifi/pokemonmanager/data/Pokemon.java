@@ -42,6 +42,7 @@ public class Pokemon implements Parcelable, Serializable {
     private int trainerId;
     private boolean isSwapAllowed;
     private List<String> swapIds;
+    private List<String> competitionIds;
 
     public Pokemon(String name, Type type) {
         this.id = nextId++;
@@ -49,6 +50,7 @@ public class Pokemon implements Parcelable, Serializable {
         this.type = type;
         this.isSwapAllowed = true;
         this.swapIds = new ArrayList<>();
+        this.competitionIds = new ArrayList<>();
     }
 
     public Pokemon(Parcel in) {
@@ -59,6 +61,8 @@ public class Pokemon implements Parcelable, Serializable {
         this.isSwapAllowed = in.readInt() != 0;
         this.swapIds = new ArrayList<>();
         in.readStringList(this.swapIds);
+        // TODO: Rebuilt the Pokemon object from the Parcel
+
     }
 
     public String getName() {
@@ -130,6 +134,29 @@ public class Pokemon implements Parcelable, Serializable {
         }
     }
 
+    public void addCompetition(Competition competition) {
+        competitionIds.add(competition.getId());
+    }
+
+    public List<Competition> getCompetitions() {
+        List<Competition> list = new ArrayList<>();
+        SerialStorage serialStorage = SerialStorage.getInstance();
+
+        for (String competitionId : competitionIds) {
+            Competition competitionById = serialStorage.getCompetitionById(competitionId);
+            list.add(competitionById);
+        }
+
+        return list;
+    }
+
+    public void setCompetitions(List<Competition> competitions) {
+        this.competitionIds.clear();
+        for (Competition competition : competitions) {
+            this.competitionIds.add(competition.getId());
+        }
+    }
+
     @Override
     public String toString() {
         return "Pokemon(" + getId() + ") '"
@@ -150,5 +177,6 @@ public class Pokemon implements Parcelable, Serializable {
         dest.writeInt(this.trainerId);
         dest.writeInt(this.isSwapAllowed ? 1 : 0);//? is ternary operator, returns 1 if true, 0 if false
         dest.writeStringList(this.swapIds);
+        dest.writeStringList(this.competitionIds);
     }
 }

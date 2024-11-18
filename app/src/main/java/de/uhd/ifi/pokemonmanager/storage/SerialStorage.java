@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import de.uhd.ifi.pokemonmanager.data.Competition;
 import de.uhd.ifi.pokemonmanager.data.Pokemon;
 import de.uhd.ifi.pokemonmanager.data.Swap;
 import de.uhd.ifi.pokemonmanager.data.Trainer;
@@ -18,9 +19,9 @@ import static java.util.stream.Collectors.toList;
 /**
  * Manages Storage for PokemonManager.
  * <p>
- * Pokemon, Trainer and Swap data is saved to .ser files when {@link SerialStorage#saveAll(Context)} is called.
+ * Pokemon, Trainer, Swap and Competition data is saved to .ser files when {@link SerialStorage#saveAll(Context)} is called.
  * {@link Pokemon} and {@link Trainer} are stored in ArrayLists at the place corresponding to their id.
- * {@link Swap} does not have linear IDs and are stored in HashMaps instead.
+ * {@link Swap} and {@link Competition} do not have linear IDs and are stored in HashMaps instead.
  * <p>
  * For reading and writing files, {@link Serial} is used.
  */
@@ -39,15 +40,18 @@ public class SerialStorage {
     private static final String POKEMON_FILE = "pokemon_list.ser";
     private static final String TRAINER_FILE = "trainer_list.ser";
     private static final String SWAPS_FILE = "swaps.ser";
+    private static final String COMPETITIONS_FILE = "competitions.ser";
 
     private final ArrayList<Pokemon> pokemons;
     private final ArrayList<Trainer> trainers;
     private final HashMap<String, Swap> swaps;
+    private final HashMap<String, Competition> competitions;
 
     private SerialStorage() {
         pokemons = new ArrayList<>();
         trainers = new ArrayList<>();
         swaps = new HashMap<>();
+        competitions = new HashMap<>();
     }
 
     /**
@@ -115,13 +119,32 @@ public class SerialStorage {
     }
 
     /**
-     * Saves attributes of a {@link Swap} in storage.
+     * Saves attributes of a {@link Swap} or {@link Competition} in storage.
      *
-     * @param swap Swap that gets its attributes updated.
+     * @param swap Swap or Competition that gets its attributes updated.
      */
     public void save(Swap swap) {
-        swaps.put(swap.getId(), swap);
+        if (swap instanceof Competition) {
+            competitions.put(swap.getId(), (Competition) swap);
+        } else {
+            swaps.put(swap.getId(), swap);
+        }
     }
+
+    /**
+     * Removes a {@link Swap} or {@link Competition} from storage.
+     * <p>
+     *
+     * @param toRemove Pokemon that will be removed from storage.
+     */
+    public void remove(Swap toRemove) {
+        if (toRemove instanceof Competition) {
+            competitions.remove(toRemove.getId());
+        } else {
+            swaps.remove(toRemove.getId());
+        }
+    }
+
 
     /**
      * Gets {@link Pokemon} from storage by id.
@@ -166,6 +189,16 @@ public class SerialStorage {
     }
 
     /**
+     * Gets {@link Competition} from storage by id.
+     *
+     * @param id of Competition.
+     * @return Competition with given id.
+     */
+    public Competition getCompetitionById(final String id) {
+        return competitions.get(id);
+    }
+
+    /**
      * Clears Storage, deletes all files.
      *
      * @param context from where method is called. Needed to get file directory.
@@ -175,6 +208,7 @@ public class SerialStorage {
         pokemons.clear();
         trainers.clear();
         swaps.clear();
+        competitions.clear();
 
         Pokemon.setNextId(0);
         Trainer.setNextId(0);
@@ -184,6 +218,7 @@ public class SerialStorage {
         new File(folder, POKEMON_FILE).delete();
         new File(folder, TRAINER_FILE).delete();
         new File(folder, SWAPS_FILE).delete();
+        new File(folder, COMPETITIONS_FILE).delete();
     }
 
     /**
@@ -199,6 +234,7 @@ public class SerialStorage {
         Serial.write(new File(folder, POKEMON_FILE), pokemons);
         Serial.write(new File(folder, TRAINER_FILE), trainers);
         Serial.write(new File(folder, SWAPS_FILE), swaps);
+        Serial.write(new File(folder, COMPETITIONS_FILE), competitions);
     }
 
     /**
@@ -211,6 +247,7 @@ public class SerialStorage {
         pokemons.clear();
         trainers.clear();
         swaps.clear();
+        competitions.clear();
 
         Pokemon.setNextId(Serial.read(new File(folder, MAX_POKEMON_ID_FILE), 0));
         Trainer.setNextId(Serial.read(new File(folder, MAX_TRAINER_ID_FILE), 0));
@@ -218,5 +255,6 @@ public class SerialStorage {
         pokemons.addAll(Serial.read(new File(folder, POKEMON_FILE), new ArrayList<>()));
         trainers.addAll(Serial.read(new File(folder, TRAINER_FILE), new ArrayList<>()));
         swaps.putAll(Serial.read(new File(folder, SWAPS_FILE), new HashMap<>()));
+        competitions.putAll(Serial.read(new File(folder, COMPETITIONS_FILE), new HashMap<>()));
     }
 }

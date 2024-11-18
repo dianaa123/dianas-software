@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/nameInputLayout"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/pokemon_name">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/nameText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/typeInputLayout"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/pokemon_type">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/trainerInputLayout"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:hint="@string/pokemon_trainer">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/trainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <TextView
+            android:id="@+id/swapAllowText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/pokemon_swap_allow"
+            android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+        <TextView
+            android:id="@+id/swapAllowed"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/swapsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/pokemon_swaps"
+            android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/swapList"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginTop="16dp" />
+
+        <TextView
+            android:id="@+id/competitionsText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/pokemon_competitions"
+            android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/competitionList"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
+</ScrollView>

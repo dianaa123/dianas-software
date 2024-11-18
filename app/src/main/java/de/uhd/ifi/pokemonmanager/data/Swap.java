@@ -8,10 +8,11 @@ import java.util.Date;
 import de.uhd.ifi.pokemonmanager.storage.SerialStorage;
 
 /**
- * Swap class for handling Swap object, implements Parcelable and Serializable
+ * Swap class to swap s Pokemon with another valid Pokemon. This class implements {@link Serializable}
+ * so that it can be stored in {@link SerialStorage}.
  * <p>
- * Swap has id, date, target and source -Pokemon and -Trainer attributes. Call Swap.execute to swap.
- * <p>
+ * Swap has id, date, target and source {@link Pokemon} and {@link Trainer} attributes.
+ * Call {@link #execute(Pokemon, Pokemon)} to swap.
  *
  * @see Pokemon for more information on Serializable and Parcelable
  */
@@ -26,11 +27,6 @@ public class Swap implements Serializable {
     protected int targetPokemonId;
     protected int sourceTrainerId;
     protected int targetTrainerId;
-
-
-    public Swap() {
-
-    }
 
     public void execute(Pokemon sourcePokemon, Pokemon targetPokemon) {
         if (!sourcePokemon.isSwapAllowed() || !targetPokemon.isSwapAllowed()) {
@@ -65,7 +61,16 @@ public class Swap implements Serializable {
         sourceTrainer.addPokemon(targetPokemon);
         sourcePokemon.addSwap(this);
         targetPokemon.addSwap(this);
+    }
 
+    public Pokemon getOtherPokemon(Pokemon p) {
+        if (STORAGE.getPokemonById(sourcePokemonId) == null) {
+            return null;
+        } else if (p.equals(STORAGE.getPokemonById(sourcePokemonId))) {
+            return STORAGE.getPokemonById(targetPokemonId);
+        } else {
+            return STORAGE.getPokemonById(sourcePokemonId);
+        }
     }
 
     public Date getDate() {
