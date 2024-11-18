@@ -54,6 +54,7 @@ public class Pokemon implements Parcelable, Serializable {
     }
 
     public Pokemon(Parcel in) {
+        // TODO: Rebuilt the Pokemon object from the Parcel
         this.id = in.readInt();
         this.name = in.readString();
         this.type = Type.valueOf(in.readString());
@@ -61,7 +62,8 @@ public class Pokemon implements Parcelable, Serializable {
         this.isSwapAllowed = in.readInt() != 0;
         this.swapIds = new ArrayList<>();
         in.readStringList(this.swapIds);
-        // TODO: Rebuilt the Pokemon object from the Parcel
+        this.competitionIds = new ArrayList<>();
+        in.readStringList(this.competitionIds);
 
     }
 

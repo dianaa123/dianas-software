@@ -11,6 +11,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.List;
 
 import de.uhd.ifi.pokemonmanager.R;
+import de.uhd.ifi.pokemonmanager.data.Competition;
 import de.uhd.ifi.pokemonmanager.data.Pokemon;
 import de.uhd.ifi.pokemonmanager.data.Trainer;
 import de.uhd.ifi.pokemonmanager.data.Type;
@@ -77,10 +78,14 @@ public class MainActivity extends AppCompatActivity {
             Pokemon p1 = new Pokemon("Shiggy", Type.WATER);
             Pokemon p2 = new Pokemon("Rettan", Type.POISON);
             Pokemon p3 = new Pokemon("Glurak", Type.FIRE);
+            Competition c1 = new Competition();
+            Competition c2 = new Competition();
 
             t1.addPokemon(p1);
             t1.addPokemon(p2);
             t2.addPokemon(p3);
+            c1.execute(p2, p3);
+            c2.execute(p1, p3);
 
             STORAGE.save(p1);
             STORAGE.save(p2);

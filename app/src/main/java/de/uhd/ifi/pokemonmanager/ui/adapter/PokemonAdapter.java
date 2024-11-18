@@ -48,7 +48,7 @@ public class PokemonAdapter extends Adapter<PokemonHolder> {
         // OnClickListener through implementation of interface
         itemView.setOnClickListener(view -> {
             ViewHolder holder = (ViewHolder) view.getTag();
-            int clickPosition = holder.getAdapterPosition();
+            int clickPosition = holder.getBindingAdapterPosition();
             Pokemon pokemon = pokemons.get(clickPosition);
             Intent detailIntent = new Intent(view.getContext(), DetailActivity.class);
             detailIntent.putExtra(MainActivity.DETAIL_POKEMON, (Parcelable) pokemon);
