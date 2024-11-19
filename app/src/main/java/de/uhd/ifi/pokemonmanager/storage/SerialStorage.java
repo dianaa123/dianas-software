@@ -137,7 +137,7 @@ public class SerialStorage {
      * @param competition Competition that gets its attributes updated.
      */
     public void save(Competition competition) {
-        if (competition.getLoser() != null) {
+        if (competition.wasTransfered()) {
             swaps.put(competition.getId(), competition);
         }
         competitions.put(competition.getId(), competition);
@@ -155,6 +155,19 @@ public class SerialStorage {
         } else {
             swaps.remove(toRemove.getId());
         }
+    }
+
+    /**
+     * Removes a {@link Competition}  from storage.
+     * <p>
+     *
+     * @param toRemove Competition that will be removed from storage.
+     */
+    public void remove(Competition toRemove) {
+        if (toRemove.wasTransfered()) {
+            swaps.remove(toRemove.getId());
+        }
+        competitions.remove(toRemove.getId());
     }
 
 

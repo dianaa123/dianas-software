@@ -82,7 +82,7 @@ class SwapHolder extends RecyclerView.ViewHolder {
         Trainer leftTrainer;
         Pokemon rightPokemon = swap.getOtherPokemon(pokemon);
         Trainer rightTrainer;
-        if (swap.getSourcePokemon().equals(pokemon)) {
+        if (pokemon.equals(swap.getSourcePokemon())) {
             leftTrainer = swap.getSourceTrainer();
             rightTrainer = swap.getTargetTrainer();
         } else {
@@ -90,9 +90,9 @@ class SwapHolder extends RecyclerView.ViewHolder {
             rightTrainer = swap.getSourceTrainer();
         }
         this.swapSourcePokemon.setText(leftPokemon.getName());
-        this.swapSourceTrainer.setText(leftTrainer.toString());
-        this.swapTargetPokemon.setText(rightPokemon.getName());
-        this.swapTargetTrainer.setText(rightTrainer.toString());
+        this.swapSourceTrainer.setText((leftTrainer != null) ? leftTrainer.toString() : "deleted Trainer");
+        this.swapTargetPokemon.setText((rightPokemon != null) ? rightPokemon.getName() : "deleted Pokemon");
+        this.swapTargetTrainer.setText((rightTrainer != null) ? rightTrainer.toString() : "deleted Trainer");
     }
 
 }

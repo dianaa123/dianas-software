@@ -122,12 +122,12 @@ class PokemonHolder extends ViewHolder {
                         .setTitle(R.string.delete_pokemon_title)
                         .setPositiveButton(R.string.delete_confirm, (dialog, id) -> {
                             //delete Swaps or Competitions if both participants deleted
-                            for (Swap swap : pokemon.getSwaps()) {
+                            for (Swap swap : pokemon.getAndCleanSwaps()) {
                                 if (swap.getOtherPokemon(pokemon) == null) {
                                     SerialStorage.getInstance().remove(swap);
                                 }
                             }
-                            for (Competition competition : pokemon.getCompetitions()) {
+                            for (Competition competition : pokemon.getAndCleanCompetitions()) {
                                 if (competition.getOtherPokemon(pokemon) == null) {
                                     SerialStorage.getInstance().remove(competition);
                                 }

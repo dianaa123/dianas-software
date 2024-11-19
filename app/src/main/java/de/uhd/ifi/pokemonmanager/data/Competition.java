@@ -16,6 +16,7 @@ public class Competition extends Swap {
     private static final String TAG = "Competition";
     private int winnerId;
     private int loserId;
+    private boolean transfered = false;
 
     /**
      * Executes Competition.
@@ -56,12 +57,14 @@ public class Competition extends Swap {
             setWinner(sourcePokemon);
             setLoser(targetPokemon);
             targetPokemon.addSwap(this);
+            setTransfered(true);
             Log.println(Log.INFO, TAG, String.format("Pokemon '%s' wins!%n", sourcePokemon));
         } else if (scoreSource < scoreTarget) {
             targetPokemon.getTrainer().addPokemon(sourcePokemon);
             setWinner(targetPokemon);
             setLoser(sourcePokemon);
             sourcePokemon.addSwap(this);
+            setTransfered(true);
             Log.println(Log.INFO, TAG, String.format("Pokemon '%s' wins!%n", targetPokemon));
         } else {
             Log.println(Log.INFO, TAG, String.format("Pokemon '%s' and '%s' both have the same score, there is no winner or loser!", sourcePokemon, targetPokemon));
@@ -84,5 +87,13 @@ public class Competition extends Swap {
 
     private void setLoser(Pokemon loser) {
         this.loserId = loser.getId();
+    }
+
+    public boolean wasTransfered() {
+        return transfered;
+    }
+
+    public void setTransfered(boolean transfered) {
+        this.transfered = transfered;
     }
 }

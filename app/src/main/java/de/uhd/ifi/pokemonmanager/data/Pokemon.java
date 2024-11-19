@@ -2,6 +2,7 @@ package de.uhd.ifi.pokemonmanager.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -127,9 +128,32 @@ public class Pokemon implements Parcelable, Serializable {
 
         for (final String swapId : swapIds) {
             final Swap swapById = serialStorage.getSwapById(swapId);
+            if(swapById == null)
+            {
+                Log.println(Log.WARN, "Pokemon", String.format("Empty Swap still in swapIds%n"));
+                continue;
+            }
             list.add(swapById);
         }
 
+        return list;
+    }
+
+    public List<Swap> getAndCleanSwaps() {
+        final List<Swap> list = new ArrayList<>();
+        final SerialStorage serialStorage = SerialStorage.getInstance();
+
+        for (final String swapId : swapIds) {
+            final Swap swapById = serialStorage.getSwapById(swapId);
+            if(swapById == null)
+            {
+                Log.println(Log.WARN, "Pokemon", String.format("Empty Swap still in swapIds%n"));
+                continue;
+            }
+            list.add(swapById);
+        }
+
+        setSwaps(list);
         return list;
     }
 
@@ -150,9 +174,32 @@ public class Pokemon implements Parcelable, Serializable {
 
         for (String competitionId : competitionIds) {
             Competition competitionById = serialStorage.getCompetitionById(competitionId);
+            if(competitionById == null)
+            {
+                Log.println(Log.WARN, "Pokemon", String.format("Empty Competition still in competitionIds%n"));
+                continue;
+            }
             list.add(competitionById);
         }
 
+        return list;
+    }
+
+    public List<Competition> getAndCleanCompetitions() {
+        List<Competition> list = new ArrayList<>();
+        SerialStorage serialStorage = SerialStorage.getInstance();
+
+        for (String competitionId : competitionIds) {
+            Competition competitionById = serialStorage.getCompetitionById(competitionId);
+            if(competitionById == null)
+            {
+                Log.println(Log.WARN, "Pokemon", String.format("Empty Competition still in competitionIds%n"));
+                continue;
+            }
+            list.add(competitionById);
+        }
+
+        setCompetitions(list);
         return list;
     }
 

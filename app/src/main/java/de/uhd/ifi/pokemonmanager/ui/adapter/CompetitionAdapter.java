@@ -79,22 +79,30 @@ class CompetitionHolder extends RecyclerView.ViewHolder {
         }
         this.competitionDateText.setText(formatter.format(competition.getDate()));
 
-        Pokemon opponentPokemon;
-        Trainer opponentTrainer;
+        Pokemon opponentPokemon = null;
+        Trainer opponentTrainer = null;
         String opponentTeam;
-        if (competition.getSourcePokemon().equals(pokemon)) {
+        if (pokemon.equals(competition.getSourcePokemon())) {
             opponentPokemon = competition.getTargetPokemon();
             opponentTrainer = competition.getTargetTrainer();
-        } else {
+        } else if (pokemon.equals(competition.getTargetPokemon())) {
             opponentPokemon = competition.getSourcePokemon();
             opponentTrainer = competition.getSourceTrainer();
         }
-        opponentTeam = opponentPokemon.getName() + " & " + opponentTrainer.toString();
+        if (opponentPokemon != null && opponentTrainer != null) {
+            opponentTeam = opponentPokemon.getName() + " & " + opponentTrainer.toString();
+        } else if (opponentPokemon != null) {
+            opponentTeam = opponentPokemon.getName();
+        } else if (opponentTrainer != null) {
+            opponentTeam = "deleted Pokemon" + " & " + opponentTrainer.toString();
+        } else {
+            opponentTeam = "deleted Pokemon";
+        }
         this.competitionOpponent.setText(opponentTeam);
 
-        if (competition.getWinner().equals(pokemon)) {
+        if (pokemon.equals(competition.getWinner())) {
             this.competitionResult.setText(R.string.competition_won);
-        } else if (competition.getLoser().equals(pokemon)){
+        } else if (pokemon.equals(competition.getLoser())) {
             this.competitionResult.setText(R.string.competition_lost);
         } else {
             this.competitionResult.setText(R.string.competition_draw);
