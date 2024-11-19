@@ -55,11 +55,13 @@ public class Competition extends Swap {
             sourcePokemon.getTrainer().addPokemon(targetPokemon);
             setWinner(sourcePokemon);
             setLoser(targetPokemon);
+            targetPokemon.addSwap(this);
             Log.println(Log.INFO, TAG, String.format("Pokemon '%s' wins!%n", sourcePokemon));
         } else if (scoreSource < scoreTarget) {
             targetPokemon.getTrainer().addPokemon(sourcePokemon);
             setWinner(targetPokemon);
             setLoser(sourcePokemon);
+            sourcePokemon.addSwap(this);
             Log.println(Log.INFO, TAG, String.format("Pokemon '%s' wins!%n", targetPokemon));
         } else {
             Log.println(Log.INFO, TAG, String.format("Pokemon '%s' and '%s' both have the same score, there is no winner or loser!", sourcePokemon, targetPokemon));

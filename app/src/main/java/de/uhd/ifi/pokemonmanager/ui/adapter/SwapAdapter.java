@@ -1,6 +1,7 @@
 package de.uhd.ifi.pokemonmanager.ui.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +15,11 @@ import java.util.List;
 import java.util.Locale;
 
 import de.uhd.ifi.pokemonmanager.R;
-import de.uhd.ifi.pokemonmanager.data.Competition;
 import de.uhd.ifi.pokemonmanager.data.Pokemon;
+import de.uhd.ifi.pokemonmanager.data.Trainer;
 import de.uhd.ifi.pokemonmanager.data.Swap;
 
-//TODO:
+//COMPLETED-TODO:
 // Hint: check CompetitionAdapter
 
 public class SwapAdapter extends RecyclerView.Adapter<SwapHolder> {
@@ -50,14 +51,48 @@ public class SwapAdapter extends RecyclerView.Adapter<SwapHolder> {
 }
 
 class SwapHolder extends RecyclerView.ViewHolder {
+    private final TextView swapDateText;
+    private final TextView swapSourcePokemon;
+    private final TextView swapSourceTrainer;
+    private final TextView swapTargetPokemon;
+    private final TextView swapTargetTrainer;
+    private SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY);
     SwapHolder(@NonNull View itemView) {
         super(itemView);
+        swapDateText = itemView.findViewById(R.id.swapDateText);
+        swapSourcePokemon = itemView.findViewById(R.id.swapSourcePokemon);
+        swapSourceTrainer = itemView.findViewById(R.id.swapSourceTrainer);
+        swapTargetPokemon = itemView.findViewById(R.id.swapTargetPokemon);
+        swapTargetTrainer = itemView.findViewById(R.id.swapTargetTrainer);
 
         itemView.setTag(this);
     }
 
     void setSwap(Swap swap, Pokemon pokemon) {
-        //TODO
+        //COMPLETED-TODO
+        if(swap == null) {
+            Log.println(Log.WARN, "SwapAdapter", String.format(Locale.getDefault(), "Empty Swap provided%n"));
+            return;
+        } else {
+            //Log.println(Log.INFO, "Current Pokemon", String.format(Locale.getDefault(), pokemon.toString()));
+        }
+        this.swapDateText.setText(formatter.format(swap.getDate()));
+
+        Pokemon leftPokemon = pokemon;
+        Trainer leftTrainer;
+        Pokemon rightPokemon = swap.getOtherPokemon(pokemon);
+        Trainer rightTrainer;
+        if (swap.getSourcePokemon().equals(pokemon)) {
+            leftTrainer = swap.getSourceTrainer();
+            rightTrainer = swap.getTargetTrainer();
+        } else {
+            leftTrainer = swap.getTargetTrainer();
+            rightTrainer = swap.getSourceTrainer();
+        }
+        this.swapSourcePokemon.setText(leftPokemon.getName());
+        this.swapSourceTrainer.setText(leftTrainer.toString());
+        this.swapTargetPokemon.setText(rightPokemon.getName());
+        this.swapTargetTrainer.setText(rightTrainer.toString());
     }
 
 }

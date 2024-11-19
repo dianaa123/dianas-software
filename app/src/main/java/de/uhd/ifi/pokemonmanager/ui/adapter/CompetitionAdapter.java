@@ -1,6 +1,7 @@
 package de.uhd.ifi.pokemonmanager.ui.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import java.util.Locale;
 import de.uhd.ifi.pokemonmanager.R;
 import de.uhd.ifi.pokemonmanager.data.Competition;
 import de.uhd.ifi.pokemonmanager.data.Pokemon;
+import de.uhd.ifi.pokemonmanager.data.Trainer;
 
 /**
  * Enables to show a list of {@link Competition}s in the UI in a so called {@link
@@ -69,12 +71,27 @@ class CompetitionHolder extends RecyclerView.ViewHolder {
     }
 
     void setCompetition(Competition competition, Pokemon pokemon) {
-        this.competitionDateText.setText(formatter.format(competition.getDate()));
-        if (competition.getSourcePokemon().equals(pokemon)) {
-            this.competitionOpponent.setText(competition.getTargetPokemon().getName());
+        if(competition == null) {
+            Log.println(Log.WARN, "CompetitionAdapter", String.format(Locale.getDefault(), "Empty Competition provided%n"));
+            return;
         } else {
-            this.competitionOpponent.setText(competition.getSourcePokemon().getName());
+            //Log.println(Log.INFO, "Current Pokemon", String.format(Locale.getDefault(), pokemon.toString()));
         }
+        this.competitionDateText.setText(formatter.format(competition.getDate()));
+
+        Pokemon opponentPokemon;
+        Trainer opponentTrainer;
+        String opponentTeam;
+        if (competition.getSourcePokemon().equals(pokemon)) {
+            opponentPokemon = competition.getTargetPokemon();
+            opponentTrainer = competition.getTargetTrainer();
+        } else {
+            opponentPokemon = competition.getSourcePokemon();
+            opponentTrainer = competition.getSourceTrainer();
+        }
+        opponentTeam = opponentPokemon.getName() + " & " + opponentTrainer.toString();
+        this.competitionOpponent.setText(opponentTeam);
+
         if (competition.getWinner().equals(pokemon)) {
             this.competitionResult.setText(R.string.competition_won);
         } else if (competition.getLoser().equals(pokemon)){

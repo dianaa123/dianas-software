@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import de.uhd.ifi.pokemonmanager.storage.SerialStorage;
 
@@ -54,17 +55,20 @@ public class Pokemon implements Parcelable, Serializable {
     }
 
     public Pokemon(Parcel in) {
-        // TODO: Rebuilt the Pokemon object from the Parcel
+        // COMPLETED: Rebuilt the Pokemon object from the Parcel
         this.id = in.readInt();
         this.name = in.readString();
         this.type = Type.valueOf(in.readString());
         this.trainerId = in.readInt();
         this.isSwapAllowed = in.readInt() != 0;
+        //this.swapIds = in.createStringArrayList();
+        //this.competitionIds = in.createStringArrayList();
+        //in.readList(swapIds, Integer.class.getClassLoader());
+        //in.readList(competitionIds, Integer.class.getClassLoader());
         this.swapIds = new ArrayList<>();
-        in.readStringList(this.swapIds);
         this.competitionIds = new ArrayList<>();
-        in.readStringList(this.competitionIds);
-
+        in.readStringList(swapIds);
+        in.readStringList(competitionIds);
     }
 
     public String getName() {
@@ -157,6 +161,19 @@ public class Pokemon implements Parcelable, Serializable {
         for (Competition competition : competitions) {
             this.competitionIds.add(competition.getId());
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pokemon pokemon = (Pokemon) o;
+        return id == pokemon.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override

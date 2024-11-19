@@ -40,6 +40,9 @@ public class MainActivity extends AppCompatActivity {
         addPokemonButton = findViewById(R.id.addPokemonButton);
 
         STORAGE.loadAll(this);
+
+        // To start with default state uncomment the next line of code
+        //STORAGE.clear(this);
         setupList();
         initUI();
     }
@@ -78,20 +81,28 @@ public class MainActivity extends AppCompatActivity {
             Pokemon p1 = new Pokemon("Shiggy", Type.WATER);
             Pokemon p2 = new Pokemon("Rettan", Type.POISON);
             Pokemon p3 = new Pokemon("Glurak", Type.FIRE);
+            Pokemon p4 = new Pokemon("Bisaknosp", Type.POISON);
             Competition c1 = new Competition();
             Competition c2 = new Competition();
+            Competition c3 = new Competition();
 
             t1.addPokemon(p1);
             t1.addPokemon(p2);
             t2.addPokemon(p3);
-            c1.execute(p2, p3);
-            c2.execute(p1, p3);
+            t2.addPokemon(p4);
 
             STORAGE.save(p1);
             STORAGE.save(p2);
             STORAGE.save(p3);
+            STORAGE.save(p4);
             STORAGE.save(t1);
             STORAGE.save(t2);
+            c1.execute(p2, p3);
+            c2.execute(p1, p3);
+            c3.execute(p4, p3);
+            STORAGE.save(c1);
+            STORAGE.save(c2);
+            STORAGE.save(c3);
             STORAGE.saveAll(this);
         }
     }

@@ -132,6 +132,18 @@ public class SerialStorage {
     }
 
     /**
+     * Saves attributes of a {@link Competition}
+     *
+     * @param competition Competition that gets its attributes updated.
+     */
+    public void save(Competition competition) {
+        if (competition.getLoser() != null) {
+            swaps.put(competition.getId(), competition);
+        }
+        competitions.put(competition.getId(), competition);
+    }
+
+    /**
      * Removes a {@link Swap} or {@link Competition} from storage.
      * <p>
      *
