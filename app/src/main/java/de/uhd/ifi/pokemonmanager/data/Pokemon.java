@@ -67,8 +67,8 @@ public class Pokemon implements Parcelable, Serializable {
         //in.readList(competitionIds, Integer.class.getClassLoader());
         this.swapIds = new ArrayList<>();
         this.competitionIds = new ArrayList<>();
-        in.readStringList(swapIds);
-        in.readStringList(competitionIds);
+        in.readStringList(this.swapIds);
+        in.readStringList(this.competitionIds);
     }
 
     public String getName() {
